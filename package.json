@@ -1,0 +1,14 @@
+{
+  "name": "parameter-arity-variance-is-not-correct",
+  "version": "1.0.0",
+  "description": "Parameter arity variance is not correct",
+  "main": "main.js",
+  "scripts": {
+    "compile": "tsc main.ts" 
+  },
+  "author": "topce",
+  "license": "MIT",
+  "dependencies": {
+    "@topce/typescript": "^24.12.16"
+  }
+}
