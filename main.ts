@@ -12,7 +12,7 @@ function doSomething(callback: (arg1: string, arg2: number) => void) {
 // 2 parameters, but 'handler' only accepts 1
 doSomething(handler);
 
-/* Original example why I get interested in this problem
+// Original example why I get interested in this problem
 
 interface I {
     hi(a: string, b: string): void;
@@ -28,4 +28,3 @@ class B implements I {
         throw new Error("Method not implemented." + a);
     }
 }
-*/

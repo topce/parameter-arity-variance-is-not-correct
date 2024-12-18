@@ -4,11 +4,11 @@
   "description": "Parameter arity variance is not correct",
   "main": "main.js",
   "scripts": {
-    "compile": "tsc main.ts" 
+    "compile": "tsc -P tsconfig.json" 
   },
   "author": "topce",
   "license": "MIT",
   "dependencies": {
-    "@topce/typescript": "^24.12.16"
+    "@topce/typescript": "24.12.22"
   }
 }
