@@ -1,4 +1,3 @@
-"use strict";
 let items = [1, 2, 3];
 items.forEach(arg => console.log(arg));
 items.forEach(() => console.log("Counting"));
@@ -8,8 +7,6 @@ function handler(arg) {
 function doSomething(callback) {
     callback('hello', 42);
 }
-// Expected error because 'doSomething' wants a callback of
-// 2 parameters, but 'handler' only accepts 1
 doSomething(handler);
 class A {
     hi(a, b, c) {
@@ -21,3 +18,12 @@ class B {
         throw new Error("Method not implemented." + a);
     }
 }
+class BrokenUserService {
+    processUser(name) {
+        console.log(`Processing user ${name}`);
+    }
+}
+function requireBothParameters(callback) {
+    callback("test", 123);
+}
+requireBothParameters(handler);

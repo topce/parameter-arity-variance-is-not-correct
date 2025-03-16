@@ -1,149 +1,116 @@
-### Proof of concept that Parameter Arity Variance is not Correct 
+# Parameter Arity Variance in TypeScript: A Critical Analysis
 
-Code in main.ts is small proof of concept that Parameter Arity Variance is not Correct 
+This project demonstrates that TypeScript's parameter arity variance behavior can lead to potential runtime errors and inconsistent type checking.
 
+## The Problem
 
-In this project use my version of TypeScript https://www.npmjs.com/package/@topce/typescript/v/24.12.16 
-I use date versioning, it is more simple if I want to keep it up to date with original TypeScript
+TypeScript allows functions with fewer parameters to be assigned to function types with more parameters. While this enables common JavaScript patterns like array callbacks, it can also introduce subtle bugs when a function is expected to handle all provided parameters.
 
+## Running the Examples
 
-main.ts
-> ```ts
-> let items = [1, 2, 3];
-> items.forEach(arg => console.log(arg));
-> items.forEach( () => console.log("Counting"));
-> 
-> function handler(arg: string) {
->     console.log(arg)
-> }
-> function doSomething(callback: (arg1: string, arg2: number) => void) {
->     callback('hello', 42);
-> }
-> // Expected error because 'doSomething' wants a callback of
-> // 2 parameters, but 'handler' only accepts 1
-> doSomething(handler);
-> 
->```
+This project uses a modified version of TypeScript that reports errors 
+when functions with fewer parameters are assigned to function types with more parameters:
+https://github.com/topce/typescript-go/tree/parameter-arity-variance-is-not-correct
 
-to run it localy 
->```bash
-> npm i
-> npm run compile 
->```
-
-you will get one error:
-```bash 
-main.ts:13:13 - error TS2345: Argument of type '(arg: string) => void' is not assignable to parameter of type '(arg1: string, arg2: number) => void'.
-  Target signature provides too many arguments. Expected 2 or more, but got 1.
-
-13 doSomething(handler);
-               ~~~~~~~
-
-
-Found 1 error in main.ts:13
-
-```
-Notice you do not have compile errors on forEach!
-### How this works?
-First add code in checker.ts to check for parameter arity error
-and in  es5.d.ts add forEach overloading 
-
-> ```ts
->    forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
->
->    forEach(callbackfn: (value: T, index: number) => void, thisArg?: any): void;
->    forEach(callbackfn: (value: T) => void, thisArg?: any): void;
->    forEach(callbackfn: () => void, thisArg?: any): void;
-> ```
-
-### Why did not you create PR for this.
-
-Try few years ago was kindly refuse.
-If they think that working as expected nothing to do there.
-
-### Cons 
- 
-This could break some code where authors of code indeed relied 
-that "parameter arity variance is correct" for example 
-in TypeScript itself could not compile  with my version of compiler.
-Also some libraries but this could be adressed with --skipLibCheck option
-
-This is POC and use it on your own responsability!
-
-from TypeScript original wiki 
-https://github.com/Microsoft/TypeScript/wiki/FAQ#parameter-arity-variance-is-correct
-
-### Parameter Arity Variance is Correct
-
-> I wrote some code like this and expected an error:
-> ```ts
-> function handler(arg: string) {
->     // ....
-> }
->
-> function doSomething(callback: (arg1: string, arg2: number) => void) {
->     callback('hello', 42);
-> }
->
-> // Expected error because 'doSomething' wants a callback of
-> // 2 parameters, but 'handler' only accepts 1
-> doSomething(handler);
-> ```
-
-This is the expected and desired behavior.
-
-Let's consider another program first:
-```ts
-let items = [1, 2, 3];
-items.forEach(arg => console.log(arg));
+```bash
+.\bin\tsgo.exe tsc main.ts
 ```
 
-This is isomorphic to the example that "wanted" an error.
-At runtime, `forEach` invokes the given callback with three arguments (value, index, array), but most of the time the callback only uses one or two of the arguments.
-This is a very common JavaScript pattern and it would be burdensome to have to explicitly declare unused parameters.
+## Examples Demonstrating the Issue
 
-If this *were* an error, it's not even clear how you would fix it! Adding the extra parameters is likely to run afoul of your linter:
-```ts
-let items = [1, 2, 3];
-// Error: Unused variables 'i', 'arr'
-items.forEach((arg, i, arr) => console.log(arg));
+### Example 1: Callback Parameters Being Silently Ignored
+
+```typescript
+// Typical callback scenario - TypeScript allows this
+function handler(arg: string) {
+    console.log(arg)
+}
+
+function doSomething(callback: (arg1: string, arg2: number) => void) {
+    callback('hello', 42); // Second parameter is silently ignored by handler
+}
+
+doSomething(handler); // Should warn that handler doesn't use the second parameter
 ```
-JavaScript doesn't have a "discard" binding method, so you'd either end up with lint suppressions, or ugly and useless parameters:
+
+### Example 2: Interface Implementation Inconsistency
+
 ```ts
-// No one wants to write this sad code:
-items.forEach((arg, _1, _2) => console.log(arg));
-```
+interface I {
+    hi(a: string, b: string): void;
+}
 
-> But `forEach` should just mark its parameters as optional!
-> e.g. `forEach(callback: (element?: T, index?: number, array?: T[]))`
-
-This is *not* what an optional callback parameter means.
-Function signatures are always read from the *caller's* perspective.
-If `forEach` declared that its callback parameters were optional, the meaning of that is "`forEach` **might call the callback with 0 arguments**".
-
-The meaning of an optional callback parameter is *this*:
-```ts
-// Invoke the provided function with 0 or 1 argument
-function maybeCallWithArg(callback: (x?: number) => void) {
-    if (Math.random() > 0.5) {
-        callback();
-    } else {
-        callback(42);
+// Error - TypeScript correctly prevents adding MORE parameters
+class A implements I {
+    hi(a: string, b: string, c: string): void { // Error: Too many parameters
+        throw new Error("Method not implemented." + a);
     }
 }
-```
-`forEach` *always* provides all three arguments to its callback.
-You don't have to check for the `index` argument to be `undefined` - it's always there; it's not optional.
 
-There is currently not a way in TypeScript to indicate that a callback parameter *must* be present.
-Note that this sort of enforcement wouldn't ever directly fix a bug.
-In other words, in a hypothetical world where `forEach` callbacks were required to accept a minimum of one argument, you'd have this code:
-```ts
-[1, 2, 3].forEach(() => console.log("just counting"));
-             //   ~~ Error, not enough arguments?
+// No error - but should be flagged as potentially unsafe
+class B implements I {
+    hi(a: string): void { // Only handles first parameter when interface requires two
+        throw new Error("Method not implemented." + a);
+    }
+};
 ```
-which would be "fixed", but *not made any more correct*, by adding a parameter:
+
+### Example 3: Real-world Problem Scenario
+
 ```ts
-[1, 2, 3].forEach(x => console.log("just counting"));
-               // OK, but doesn't do anything different at all
+// A service interface that processes users
+interface UserService {
+    processUser(name: string, id: number): void;
+}
+
+class BrokenUserService implements UserService {
+    // TypeScript accepts this despite missing the required id parameter
+    processUser(name: string): void {
+        // This implementation never uses the id, which could cause logic errors
+        console.log(`Processing user ${name}`);
+        // What if business logic depended on the id parameter?
+    }
+}
+
+function requireBothParameters(callback: (a: string, b: number) => void) {
+    // This function assumes callback will use both parameters
+    callback("test", 123);
+}
+
+// TypeScript allows this despite handler ignoring the second parameter
+requireBothParameters(handler);
 ```
+
+### Common Case Where Variance Is Useful
+
+```ts
+// Standard array iteration - here we want to allow partial parameter usage
+let items = [1, 2, 3];
+items.forEach(arg => console.log(arg)); // Only using first parameter is fine
+items.forEach(() => console.log("Counting")); // Sometimes we don't need parameters at all
+```
+
+## TypeScript's Justification vs. Reality
+
+TypeScript's official position (from their [FAQ](https://github.com/Microsoft/TypeScript/wiki/FAQ#parameter-arity-variance-is-correct)) is that this behavior is "correct" because it supports common JavaScript patterns like array callbacks.
+
+However, this creates a blind spot in the type system:
+
+1. TypeScript enforces that you can't add MORE parameters than an interface specifies
+2. But allows you to implement FEWER parameters, potentially ignoring critical information
+
+## Why This Matters
+
+The parameter arity variance issue creates an inconsistency in TypeScript's otherwise strong type-checking:
+
+1. **Silent failures**: Implementations can silently ignore parameters without warning
+2. **Inconsistent enforcement**: Different rules applied to extra vs. missing parameters
+3. **False sense of safety**: Interface conformance doesn't guarantee parameter handling
+
+## Potential Solutions
+
+1. Add an optional compiler flag for stricter parameter checking
+2. Introduce syntax to mark parameters that must be handled by implementations
+3. Provide linting rules to detect potentially problematic parameter arity variance
+
+This project aims to highlight the need for TypeScript to revisit this design decision.

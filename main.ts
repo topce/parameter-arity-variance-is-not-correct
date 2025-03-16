@@ -1,3 +1,11 @@
+// redefine the forEach method to accept 0, 1 or 2 parameters
+interface Array<T> {
+    forEach(callbackfn: (value: T, index: number) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: T) => void, thisArg?: any): void;
+    forEach(callbackfn: () => void, thisArg?: any): void;
+}
+
+
 let items = [1, 2, 3];
 items.forEach(arg => console.log(arg));
 items.forEach( () => console.log("Counting"));
@@ -28,3 +36,27 @@ class B implements I {
         throw new Error("Method not implemented." + a);
     }
 }
+
+// Example 3: Real-world Problem Scenario
+// A service interface that processes users
+interface UserService {
+    processUser(name: string, id: number): void;
+}
+
+class BrokenUserService implements UserService {
+    // TypeScript accepts this despite missing the required id parameter
+    processUser(name: string): void {
+        // This implementation never uses the id, which could cause logic errors
+        console.log(`Processing user ${name}`);
+        // What if business logic depended on the id parameter?
+    }
+}
+
+function requireBothParameters(callback: (a: string, b: number) => void) {
+    // This function assumes callback will use both parameters
+    callback("test", 123);
+}
+
+// TypeScript allows this despite handler ignoring the second parameter
+requireBothParameters(handler);
+
