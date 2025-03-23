@@ -13,7 +13,13 @@ when functions with fewer parameters are assigned to function types with more pa
 https://github.com/topce/typescript-go/tree/parameter-arity-variance-is-not-correct
 
 ```bash
-.\bin\tsgo.exe tsc main.ts
+.\bin\tsgo.exe tsc --noParameterVariance --skipLibCheck .\main.ts 
+```
+
+Still you can use default TypeScript go compiler if you do not specify noParameterVariance flag
+
+```bash
+.\bin\tsgo.exe tsc .\main.ts 
 ```
 
 ## Examples Demonstrating the Issue
