@@ -5,7 +5,7 @@ interface Array<T> {
     forEach(callbackfn: () => void, thisArg?: any): void;
 }
 
-
+// no error here  even with flag --noParameterVariance turn on
 let items = [1, 2, 3];
 items.forEach(arg => console.log(arg));
 items.forEach( () => console.log("Counting"));
