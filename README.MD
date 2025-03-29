@@ -113,10 +113,16 @@ The parameter arity variance issue creates an inconsistency in TypeScript's othe
 2. **Inconsistent enforcement**: Different rules applied to extra vs. missing parameters
 3. **False sense of safety**: Interface conformance doesn't guarantee parameter handling
 
-## Potential Solutions
+## Solution
 
-1. Add an optional compiler flag for stricter parameter checking
-2. Introduce syntax to mark parameters that must be handled by implementations
-3. Provide linting rules to detect potentially problematic parameter arity variance
+Add an optional compiler flag for stricter parameter checking
+--noParameterVariance
 
-This project aims to highlight the need for TypeScript to revisit this design decision.
+## Previus issues mark as work as intended indeed report error with flag --noParameterVariance
+
+- [#13043: Type hole with compatibility between optional parameters/extra parameters](https://github.com/microsoft/TypeScript/issues/13043)
+- [#17868: Reject functions with not enough parameters on strict mode](https://github.com/microsoft/TypeScript/issues/17868)
+- [#20274: Feature request - Make a parameter required for callback function](https://github.com/microsoft/TypeScript/issues/20274)
+- [#20541: Function argument comparison doesn't match expectations](https://github.com/microsoft/TypeScript/issues/20541)
+- [#21868: Typecheck passes for incorrect assignment](https://github.com/microsoft/TypeScript/issues/21868)
+

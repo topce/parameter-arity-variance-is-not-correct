@@ -1,0 +1,1 @@
+const some : ((arg : string) => boolean) = () => true;
