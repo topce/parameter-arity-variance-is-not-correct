@@ -1,11 +1,10 @@
 // redefine the forEach method to accept 0, 1 or 2 parameters
-/*
 interface Array<T> {
     forEach(callbackfn: (value: T, index: number) => void, thisArg?: any): void;
     forEach(callbackfn: (value: T) => void, thisArg?: any): void;
     forEach(callbackfn: () => void, thisArg?: any): void;
 }
-*/
+
 // no error here  even with flag --noParameterVariance turn on
 let items = [1, 2, 3];
 items.forEach(arg => console.log(arg));
