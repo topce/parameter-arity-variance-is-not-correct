@@ -8,19 +8,30 @@ TypeScript allows functions with fewer parameters to be assigned to function typ
 
 ## Running the Examples
 
-This project uses a modified version of TypeScript that reports errors 
-when functions with fewer parameters are assigned to function types with more parameters:
-https://github.com/topce/typescript-go/tree/parameter-arity-variance-is-not-correct
+This project includes two versions of TypeScript compiler:
 
-```bash
-.\bin\tsgo.exe tsc  .\main.ts 
-```
+1. **Modified Version** (in `/bin` folder): Reports errors when functions with fewer parameters are assigned to function types with more parameters.
+   Source: <https://github.com/topce/typescript-go/tree/best-type-script>
 
-Still you can use default TypeScript go compiler if you do not specify noParameterVariance flag
+   ```bash
+   .\bin\tsgo.exe tsc .\main.ts
+   ```
 
-```bash
-.\bin\tsgo.exe tsc .\main.ts 
-```
+2. **Original Microsoft Version** (in `/_bin` folder): Uses TypeScript's default parameter arity variance behavior.
+
+   ```bash
+   .\_bin\tsgo.exe tsc .\main.ts
+   ```
+
+### Differences Between Versions
+
+The key difference is that the modified compiler in the `/bin` folder:
+
+- Enforces stricter parameter checking by default
+- Flags functions with fewer parameters when assigned to function types with more parameters
+- Reports errors in cases where the original compiler would silently allow potentially unsafe assignments
+
+This helps identify potential runtime errors that could occur when required parameters are silently ignored.
 
 ## Examples Demonstrating the Issue
 
@@ -115,16 +126,27 @@ The parameter arity variance issue creates an inconsistency in TypeScript's othe
 
 ## Solution
 
-Add an optional compiler flag for stricter parameter checking
---noParameterVariance
+The solution to this issue is to use the modified TypeScript compiler (in the `/bin` folder) that enforces stricter parameter checking. This compiler:
 
-## Previus issues mark as work as intended indeed report error with flag --noParameterVariance
+1. Reports errors when functions with fewer parameters are assigned to function types that expect more parameters
+2. Maintains TypeScript's type safety without compromising on parameter handling
+3. Helps prevent potential runtime errors from silently ignored parameters
+
+## Modifying d.ts Files
+
+To modify d.ts files in the bin folder, run the following commands:
+
+```bash
+node .\transform-dts-files.js
+npx dprint fmt "bin/*.d.ts"
+```
+
+## Previous Issues That Are Now Resolved by The Modified Compiler
+
+The following issues were previously marked as "working as intended" by the TypeScript team, but are now caught and reported as errors by the modified compiler:
 
 - [#13043: Type hole with compatibility between optional parameters/extra parameters](https://github.com/microsoft/TypeScript/issues/13043)
 - [#17868: Reject functions with not enough parameters on strict mode](https://github.com/microsoft/TypeScript/issues/17868)
 - [#20274: Feature request - Make a parameter required for callback function](https://github.com/microsoft/TypeScript/issues/20274)
 - [#20541: Function argument comparison doesn't match expectations](https://github.com/microsoft/TypeScript/issues/20541)
 - [#21868: Typecheck passes for incorrect assignment](https://github.com/microsoft/TypeScript/issues/21868)
-
-node .\transform-dts-files.js
-npx dprint  fmt "bin/*.d.ts"
