@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference no-default-lib="true"/>
 
 interface Map<K, V> {
@@ -26,6 +25,21 @@ interface Map<K, V> {
      * Executes a provided function once per each key/value pair in the Map, in insertion order.
      */
     forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
+    /**
+     * Executes a provided function once per each key/value pair in the Map, in insertion order.
+     */
+    forEach(callbackfn: () => void, thisArg?: any): void;
+
+    /**
+     * Executes a provided function once per each key/value pair in the Map, in insertion order.
+     */
+    forEach(callbackfn: (value: V) => void, thisArg?: any): void;
+
+    /**
+     * Executes a provided function once per each key/value pair in the Map, in insertion order.
+     */
+    forEach(callbackfn: (value: V, key: K) => void, thisArg?: any): void;
+
     /**
      * Returns a specified element from the Map object. If the value that is associated to the provided key is an object, then you will get a reference to that object and any change made to that object will effectively modify it inside the Map.
      * @returns Returns the element associated with the specified key. If no element is associated with the specified key, undefined is returned.
@@ -54,6 +68,12 @@ declare var Map: MapConstructor;
 
 interface ReadonlyMap<K, V> {
     forEach(callbackfn: (value: V, key: K, map: ReadonlyMap<K, V>) => void, thisArg?: any): void;
+    forEach(callbackfn: () => void, thisArg?: any): void;
+
+    forEach(callbackfn: (value: V) => void, thisArg?: any): void;
+
+    forEach(callbackfn: (value: V, key: K) => void, thisArg?: any): void;
+
     get(key: K): V | undefined;
     has(key: K): boolean;
     readonly size: number;
@@ -103,6 +123,21 @@ interface Set<T> {
      */
     forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any): void;
     /**
+     * Executes a provided function once per each value in the Set object, in insertion order.
+     */
+    forEach(callbackfn: () => void, thisArg?: any): void;
+
+    /**
+     * Executes a provided function once per each value in the Set object, in insertion order.
+     */
+    forEach(callbackfn: (value: T) => void, thisArg?: any): void;
+
+    /**
+     * Executes a provided function once per each value in the Set object, in insertion order.
+     */
+    forEach(callbackfn: (value: T, value2: T) => void, thisArg?: any): void;
+
+    /**
      * @returns a boolean indicating whether an element with the specified value exists in the Set or not.
      */
     has(value: T): boolean;
@@ -120,6 +155,12 @@ declare var Set: SetConstructor;
 
 interface ReadonlySet<T> {
     forEach(callbackfn: (value: T, value2: T, set: ReadonlySet<T>) => void, thisArg?: any): void;
+    forEach(callbackfn: () => void, thisArg?: any): void;
+
+    forEach(callbackfn: (value: T) => void, thisArg?: any): void;
+
+    forEach(callbackfn: (value: T, value2: T) => void, thisArg?: any): void;
+
     has(value: T): boolean;
     readonly size: number;
 }

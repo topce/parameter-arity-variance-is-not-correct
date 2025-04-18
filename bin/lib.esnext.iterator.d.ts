@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference no-default-lib="true"/>
 
 /// <reference lib="es2015.iterable" />
@@ -48,18 +47,45 @@ declare global {
          * @param callbackfn A function that accepts up to two arguments to be used to transform values from the underlying iterator.
          */
         map<U>(callbackfn: (value: T, index: number) => U): IteratorObject<U, undefined, unknown>;
+        /**
+         * Creates an iterator whose values are the result of applying the callback to the values from this iterator.
+         * @param callbackfn A function that accepts up to two arguments to be used to transform values from the underlying iterator.
+         */
+        map<U>(callbackfn: () => U): IteratorObject<U, undefined, unknown>;
+
+        /**
+         * Creates an iterator whose values are the result of applying the callback to the values from this iterator.
+         * @param callbackfn A function that accepts up to two arguments to be used to transform values from the underlying iterator.
+         */
+        map<U>(callbackfn: (value: T) => U): IteratorObject<U, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are those from this iterator for which the provided predicate returns true.
          * @param predicate A function that accepts up to two arguments to be used to test values from the underlying iterator.
          */
         filter<S extends T>(predicate: (value: T, index: number) => value is S): IteratorObject<S, undefined, unknown>;
+        /**
+         * Creates an iterator whose values are those from this iterator for which the provided predicate returns true.
+         * @param predicate A function that accepts up to two arguments to be used to test values from the underlying iterator.
+         */
+        filter<S extends T>(predicate: (value: T) => value is S): IteratorObject<S, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are those from this iterator for which the provided predicate returns true.
          * @param predicate A function that accepts up to two arguments to be used to test values from the underlying iterator.
          */
         filter(predicate: (value: T, index: number) => unknown): IteratorObject<T, undefined, unknown>;
+        /**
+         * Creates an iterator whose values are those from this iterator for which the provided predicate returns true.
+         * @param predicate A function that accepts up to two arguments to be used to test values from the underlying iterator.
+         */
+        filter(predicate: () => unknown): IteratorObject<T, undefined, unknown>;
+
+        /**
+         * Creates an iterator whose values are those from this iterator for which the provided predicate returns true.
+         * @param predicate A function that accepts up to two arguments to be used to test values from the underlying iterator.
+         */
+        filter(predicate: (value: T) => unknown): IteratorObject<T, undefined, unknown>;
 
         /**
          * Creates an iterator whose values are the values from this iterator, stopping once the provided limit is reached.
@@ -78,6 +104,17 @@ declare global {
          * @param callback A function that accepts up to two arguments to be used to transform values from the underlying iterator into new iterators or iterables to be flattened into the result.
          */
         flatMap<U>(callback: (value: T, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>): IteratorObject<U, undefined, unknown>;
+        /**
+         * Creates an iterator whose values are the result of applying the callback to the values from this iterator and then flattening the resulting iterators or iterables.
+         * @param callback A function that accepts up to two arguments to be used to transform values from the underlying iterator into new iterators or iterables to be flattened into the result.
+         */
+        flatMap<U>(callback: () => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>): IteratorObject<U, undefined, unknown>;
+
+        /**
+         * Creates an iterator whose values are the result of applying the callback to the values from this iterator and then flattening the resulting iterators or iterables.
+         * @param callback A function that accepts up to two arguments to be used to transform values from the underlying iterator into new iterators or iterables to be flattened into the result.
+         */
+        flatMap<U>(callback: (value: T) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>): IteratorObject<U, undefined, unknown>;
 
         /**
          * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
@@ -85,7 +122,33 @@ declare global {
          * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of a value from the iterator.
          */
         reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number) => T): T;
+        /**
+         * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+         * @param callbackfn A function that accepts up to three arguments. The reduce method calls the callbackfn function one time for each element in the iterator.
+         * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of a value from the iterator.
+         */
+        reduce(callbackfn: () => T): T;
+
+        /**
+         * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+         * @param callbackfn A function that accepts up to three arguments. The reduce method calls the callbackfn function one time for each element in the iterator.
+         * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of a value from the iterator.
+         */
+        reduce(callbackfn: (previousValue: T) => T): T;
+
+        /**
+         * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+         * @param callbackfn A function that accepts up to three arguments. The reduce method calls the callbackfn function one time for each element in the iterator.
+         * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of a value from the iterator.
+         */
+        reduce(callbackfn: (previousValue: T, currentValue: T) => T): T;
+
         reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number) => T, initialValue: T): T;
+        reduce(callbackfn: () => T, initialValue: T): T;
+
+        reduce(callbackfn: (previousValue: T) => T, initialValue: T): T;
+
+        reduce(callbackfn: (previousValue: T, currentValue: T) => T, initialValue: T): T;
 
         /**
          * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
@@ -93,6 +156,26 @@ declare global {
          * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of a value from the iterator.
          */
         reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number) => U, initialValue: U): U;
+        /**
+         * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+         * @param callbackfn A function that accepts up to three arguments. The reduce method calls the callbackfn function one time for each element in the iterator.
+         * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of a value from the iterator.
+         */
+        reduce<U>(callbackfn: () => U, initialValue: U): U;
+
+        /**
+         * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+         * @param callbackfn A function that accepts up to three arguments. The reduce method calls the callbackfn function one time for each element in the iterator.
+         * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of a value from the iterator.
+         */
+        reduce<U>(callbackfn: (previousValue: U) => U, initialValue: U): U;
+
+        /**
+         * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
+         * @param callbackfn A function that accepts up to three arguments. The reduce method calls the callbackfn function one time for each element in the iterator.
+         * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of a value from the iterator.
+         */
+        reduce<U>(callbackfn: (previousValue: U, currentValue: T) => U, initialValue: U): U;
 
         /**
          * Creates a new array from the values yielded by this iterator.
@@ -104,6 +187,17 @@ declare global {
          * @param callbackfn  A function that accepts up to two arguments. forEach calls the callbackfn function one time for each element in the iterator.
          */
         forEach(callbackfn: (value: T, index: number) => void): void;
+        /**
+         * Performs the specified action for each element in the iterator.
+         * @param callbackfn  A function that accepts up to two arguments. forEach calls the callbackfn function one time for each element in the iterator.
+         */
+        forEach(callbackfn: () => void): void;
+
+        /**
+         * Performs the specified action for each element in the iterator.
+         * @param callbackfn  A function that accepts up to two arguments. forEach calls the callbackfn function one time for each element in the iterator.
+         */
+        forEach(callbackfn: (value: T) => void): void;
 
         /**
          * Determines whether the specified callback function returns true for any element of this iterator.
@@ -112,6 +206,21 @@ declare global {
          * true, or until the end of the iterator.
          */
         some(predicate: (value: T, index: number) => unknown): boolean;
+        /**
+         * Determines whether the specified callback function returns true for any element of this iterator.
+         * @param predicate A function that accepts up to two arguments. The some method calls
+         * the predicate function for each element in this iterator until the predicate returns a value
+         * true, or until the end of the iterator.
+         */
+        some(predicate: () => unknown): boolean;
+
+        /**
+         * Determines whether the specified callback function returns true for any element of this iterator.
+         * @param predicate A function that accepts up to two arguments. The some method calls
+         * the predicate function for each element in this iterator until the predicate returns a value
+         * true, or until the end of the iterator.
+         */
+        some(predicate: (value: T) => unknown): boolean;
 
         /**
          * Determines whether all the members of this iterator satisfy the specified test.
@@ -120,6 +229,21 @@ declare global {
          * false, or until the end of this iterator.
          */
         every(predicate: (value: T, index: number) => unknown): boolean;
+        /**
+         * Determines whether all the members of this iterator satisfy the specified test.
+         * @param predicate A function that accepts up to two arguments. The every method calls
+         * the predicate function for each element in this iterator until the predicate returns
+         * false, or until the end of this iterator.
+         */
+        every(predicate: () => unknown): boolean;
+
+        /**
+         * Determines whether all the members of this iterator satisfy the specified test.
+         * @param predicate A function that accepts up to two arguments. The every method calls
+         * the predicate function for each element in this iterator until the predicate returns
+         * false, or until the end of this iterator.
+         */
+        every(predicate: (value: T) => unknown): boolean;
 
         /**
          * Returns the value of the first element in this iterator where predicate is true, and undefined
@@ -129,7 +253,19 @@ declare global {
          * immediately returns that element value. Otherwise, find returns undefined.
          */
         find<S extends T>(predicate: (value: T, index: number) => value is S): S | undefined;
+        /**
+         * Returns the value of the first element in this iterator where predicate is true, and undefined
+         * otherwise.
+         * @param predicate find calls predicate once for each element of this iterator, in
+         * order, until it finds one where predicate returns true. If such an element is found, find
+         * immediately returns that element value. Otherwise, find returns undefined.
+         */
+        find<S extends T>(predicate: (value: T) => value is S): S | undefined;
+
         find(predicate: (value: T, index: number) => unknown): T | undefined;
+        find(predicate: () => unknown): T | undefined;
+
+        find(predicate: (value: T) => unknown): T | undefined;
 
         readonly [Symbol.toStringTag]: string;
     }

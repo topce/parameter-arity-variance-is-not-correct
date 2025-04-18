@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference no-default-lib="true"/>
 
 /**
@@ -68,6 +67,24 @@ interface ClassDecoratorContext<
      * ```
      */
     addInitializer(initializer: (this: Class) => void): void;
+    /**
+     * Adds a callback to be invoked after the class definition has been finalized.
+     *
+     * @example
+     * ```ts
+     * function customElement(name: string): ClassDecoratorFunction {
+     *   return (target, context) => {
+     *     context.addInitializer(function () {
+     *       customElements.define(name, this);
+     *     });
+     *   }
+     * }
+     *
+     * @customElement("my-element")
+     * class MyElement {}
+     * ```
+     */
+    addInitializer(initializer: () => void): void;
 
     readonly metadata: DecoratorMetadata;
 }
@@ -134,6 +151,31 @@ interface ClassMethodDecoratorContext<
      * ```
      */
     addInitializer(initializer: (this: This) => void): void;
+    /**
+     * Adds a callback to be invoked either before static initializers are run (when
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
+     *
+     * @example
+     * ```ts
+     * const bound: ClassMethodDecoratorFunction = (value, context) {
+     *   if (context.private) throw new TypeError("Not supported on private methods.");
+     *   context.addInitializer(function () {
+     *     this[context.name] = this[context.name].bind(this);
+     *   });
+     * }
+     *
+     * class C {
+     *   message = "Hello";
+     *
+     *   @bound
+     *   m() {
+     *     console.log(this.message);
+     *   }
+     * }
+     * ```
+     */
+    addInitializer(initializer: () => void): void;
 
     readonly metadata: DecoratorMetadata;
 }
@@ -181,6 +223,12 @@ interface ClassGetterDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+    /**
+     * Adds a callback to be invoked either before static initializers are run (when
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
+     */
+    addInitializer(initializer: () => void): void;
 
     readonly metadata: DecoratorMetadata;
 }
@@ -228,6 +276,12 @@ interface ClassSetterDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+    /**
+     * Adds a callback to be invoked either before static initializers are run (when
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
+     */
+    addInitializer(initializer: () => void): void;
 
     readonly metadata: DecoratorMetadata;
 }
@@ -284,6 +338,12 @@ interface ClassAccessorDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+    /**
+     * Adds a callback to be invoked either before static initializers are run (when
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
+     */
+    addInitializer(initializer: () => void): void;
 
     readonly metadata: DecoratorMetadata;
 }
@@ -381,6 +441,12 @@ interface ClassFieldDecoratorContext<
      * decorating a non-`static` element).
      */
     addInitializer(initializer: (this: This) => void): void;
+    /**
+     * Adds a callback to be invoked either before static initializers are run (when
+     * decorating a `static` element), or before instance initializers are run (when
+     * decorating a non-`static` element).
+     */
+    addInitializer(initializer: () => void): void;
 
     readonly metadata: DecoratorMetadata;
 }

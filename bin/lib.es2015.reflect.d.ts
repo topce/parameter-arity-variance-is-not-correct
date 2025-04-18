@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference no-default-lib="true"/>
 
 declare namespace Reflect {
@@ -29,6 +28,10 @@ declare namespace Reflect {
         thisArgument: T,
         argumentsList: Readonly<A>,
     ): R;
+    function apply<T, A extends readonly any[], R>(target: () => R, thisArgument: T, argumentsList: Readonly<A>): R;
+
+    function apply<T, A extends readonly any[], R>(target: (this: T) => R, thisArgument: T, argumentsList: Readonly<A>): R;
+
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
 
     /**

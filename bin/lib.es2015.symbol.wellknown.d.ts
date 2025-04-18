@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference no-default-lib="true"/>
 
 /// <reference lib="es2015.symbol" />
@@ -204,6 +203,21 @@ interface RegExp {
      * @param replacer A function that returns the replacement text.
      */
     [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string;
+    /**
+     * Replaces text in a string, using this regular expression.
+     * @param string A String object or string literal whose contents matching against
+     *               this regular expression will be replaced
+     * @param replacer A function that returns the replacement text.
+     */
+    [Symbol.replace](string: string, replacer: () => string): string;
+
+    /**
+     * Replaces text in a string, using this regular expression.
+     * @param string A String object or string literal whose contents matching against
+     *               this regular expression will be replaced
+     * @param replacer A function that returns the replacement text.
+     */
+    [Symbol.replace](string: string, replacer: (substring: string) => string): string;
 
     /**
      * Finds the position beginning first substring match in a regular expression search
@@ -252,7 +266,24 @@ interface String {
      * @param searchValue A object can search for and replace matches within a string.
      * @param replacer A function that returns the replacement text.
      */
-    replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; [Symbol.replace](string: string, replacer: () => string): string; [Symbol.replace](string: string, replacer: (substring: string) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
+    /**
+     * Replaces text in a string, using an object that supports replacement within a string.
+     * @param searchValue A object can search for and replace matches within a string.
+     * @param replacer A function that returns the replacement text.
+     */
+    replace(searchValue: {
+        [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string;
+    }, replacer: () => string): string;
+
+    /**
+     * Replaces text in a string, using an object that supports replacement within a string.
+     * @param searchValue A object can search for and replace matches within a string.
+     * @param replacer A function that returns the replacement text.
+     */
+    replace(searchValue: {
+        [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string;
+    }, replacer: (substring: string) => string): string;
 
     /**
      * Finds the first substring match in a regular expression search.

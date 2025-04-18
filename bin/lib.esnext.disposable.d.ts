@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference no-default-lib="true"/>
 
 /// <reference lib="es2015.symbol" />
@@ -75,6 +74,15 @@ interface DisposableStack {
      * @returns The provided {@link value}.
      */
     adopt<T>(value: T, onDispose: (value: T) => void): T;
+    /**
+     * Adds a value and associated disposal callback as a resource to the stack.
+     * @param value The value to add.
+     * @param onDispose The callback to use in place of a `[Symbol.dispose]()` method. Will be invoked with `value`
+     * as the first parameter.
+     * @returns The provided {@link value}.
+     */
+    adopt<T>(value: T, onDispose: () => void): T;
+
     /**
      * Adds a callback to be invoked when the stack is disposed.
      */
@@ -142,6 +150,15 @@ interface AsyncDisposableStack {
      * @returns The provided {@link value}.
      */
     adopt<T>(value: T, onDisposeAsync: (value: T) => PromiseLike<void> | void): T;
+    /**
+     * Adds a value and associated disposal callback as a resource to the stack.
+     * @param value The value to add.
+     * @param onDisposeAsync The callback to use in place of a `[Symbol.asyncDispose]()` method. Will be invoked with `value`
+     * as the first parameter.
+     * @returns The provided {@link value}.
+     */
+    adopt<T>(value: T, onDisposeAsync: () => PromiseLike<void> | void): T;
+
     /**
      * Adds a callback to be invoked when the stack is disposed.
      */

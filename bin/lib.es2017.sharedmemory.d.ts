@@ -13,7 +13,6 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-
 /// <reference no-default-lib="true"/>
 
 /// <reference lib="es2015.symbol" />
@@ -28,14 +27,14 @@ interface SharedArrayBuffer {
     /**
      * Returns a section of an SharedArrayBuffer.
      */
-    slice(begin: number, end?: number): SharedArrayBuffer;
+    slice(begin?: number, end?: number): SharedArrayBuffer;
     readonly [Symbol.species]: SharedArrayBuffer;
     readonly [Symbol.toStringTag]: "SharedArrayBuffer";
 }
 
 interface SharedArrayBufferConstructor {
     readonly prototype: SharedArrayBuffer;
-    new (byteLength: number): SharedArrayBuffer;
+    new (byteLength?: number): SharedArrayBuffer;
 }
 declare var SharedArrayBuffer: SharedArrayBufferConstructor;
 

@@ -13,7 +13,7 @@ when functions with fewer parameters are assigned to function types with more pa
 https://github.com/topce/typescript-go/tree/parameter-arity-variance-is-not-correct
 
 ```bash
-.\bin\tsgo.exe tsc --noParameterVariance --skipLibCheck .\main.ts 
+.\bin\tsgo.exe tsc  .\main.ts 
 ```
 
 Still you can use default TypeScript go compiler if you do not specify noParameterVariance flag
@@ -126,3 +126,5 @@ Add an optional compiler flag for stricter parameter checking
 - [#20541: Function argument comparison doesn't match expectations](https://github.com/microsoft/TypeScript/issues/20541)
 - [#21868: Typecheck passes for incorrect assignment](https://github.com/microsoft/TypeScript/issues/21868)
 
+node .\transform-dts-files.js
+npx dprint  fmt "bin/*.d.ts"
