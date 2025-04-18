@@ -1,41 +1,73 @@
 # Parameter Arity Variance in TypeScript: A Critical Analysis
 
-This project demonstrates that TypeScript's parameter arity variance behavior can lead to potential runtime errors and inconsistent type checking.
+<div align="center">
+  
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
+![Custom](https://img.shields.io/badge/Parameter_Variance-Critical-red?style=for-the-badge)
 
-## The Problem
+</div>
+
+> **A robust analysis of a critical type-safety issue in TypeScript's parameter checking mechanism.**
+
+<details>
+<summary>📑 Table of Contents</summary>
+
+- [📌 The Problem](#-the-problem)
+- [🚀 Running the Examples](#-running-the-examples)
+- [🔍 Examples Demonstrating the Issue](#-examples-demonstrating-the-issue)
+- [⚖️ TypeScript's Justification vs. Reality](#️-typescripts-justification-vs-reality)
+- [❗ Why This Matters](#-why-this-matters)
+- [💡 Solution](#-solution)
+- [🛠️ Modifying d.ts Files](#️-modifying-dts-files)
+- [🔄 Previously Reported Issues Now Resolved](#-previously-reported-issues-now-resolved)
+
+</details>
+
+## 📌 The Problem
 
 TypeScript allows functions with fewer parameters to be assigned to function types with more parameters. While this enables common JavaScript patterns like array callbacks, it can also introduce subtle bugs when a function is expected to handle all provided parameters.
 
-## Running the Examples
+## 🚀 Running the Examples
 
 This project includes two versions of TypeScript compiler:
 
-1. **Modified Version** (in `/bin` folder): Reports errors when functions with fewer parameters are assigned to function types with more parameters.
-   Source: <https://github.com/topce/typescript-go/tree/best-type-script>
+<table>
+  <tr>
+    <th>Version</th>
+    <th>Description</th>
+    <th>Command</th>
+  </tr>
+  <tr>
+    <td>🔧 <b>Modified Version</b><br>(in <code>/bin</code> folder)</td>
+    <td>Reports errors when functions with fewer parameters are assigned to function types with more parameters.<br><br>Source: <a href="https://github.com/topce/typescript-go/tree/best-type-script">typescript-go/best-type-script</a></td>
+    <td>
+      <pre>.\bin\tsgo.exe tsc .\main.ts</pre>
+    </td>
+  </tr>
+  <tr>
+    <td>🔧 <b>Original Microsoft Version</b><br>(in <code>/_bin</code> folder)</td>
+    <td>Uses TypeScript's default parameter arity variance behavior.</td>
+    <td>
+      <pre>.\_bin\tsgo.exe tsc .\main.ts</pre>
+    </td>
+  </tr>
+</table>
 
-   ```bash
-   .\bin\tsgo.exe tsc .\main.ts
-   ```
-
-2. **Original Microsoft Version** (in `/_bin` folder): Uses TypeScript's default parameter arity variance behavior.
-
-   ```bash
-   .\_bin\tsgo.exe tsc .\main.ts
-   ```
-
-### Differences Between Versions
+### ⚙️ Differences Between Versions
 
 The key difference is that the modified compiler in the `/bin` folder:
 
-- Enforces stricter parameter checking by default
-- Flags functions with fewer parameters when assigned to function types with more parameters
-- Reports errors in cases where the original compiler would silently allow potentially unsafe assignments
+- ✅ Enforces stricter parameter checking by default
+- ✅ Flags functions with fewer parameters when assigned to function types with more parameters
+- ✅ Reports errors in cases where the original compiler would silently allow potentially unsafe assignments
 
 This helps identify potential runtime errors that could occur when required parameters are silently ignored.
 
-## Examples Demonstrating the Issue
+## 🔍 Examples Demonstrating the Issue
 
-### Example 1: Callback Parameters Being Silently Ignored
+<details open>
+<summary><b>Example 1: Callback Parameters Being Silently Ignored</b></summary>
 
 ```typescript
 // Typical callback scenario - TypeScript allows this
@@ -50,7 +82,10 @@ function doSomething(callback: (arg1: string, arg2: number) => void) {
 doSomething(handler); // Should warn that handler doesn't use the second parameter
 ```
 
-### Example 2: Interface Implementation Inconsistency
+</details>
+
+<details>
+<summary><b>Example 2: Interface Implementation Inconsistency</b></summary>
 
 ```ts
 interface I {
@@ -72,7 +107,10 @@ class B implements I {
 };
 ```
 
-### Example 3: Real-world Problem Scenario
+</details>
+
+<details>
+<summary><b>Example 3: Real-world Problem Scenario</b></summary>
 
 ```ts
 // A service interface that processes users
@@ -98,7 +136,10 @@ function requireBothParameters(callback: (a: string, b: number) => void) {
 requireBothParameters(handler);
 ```
 
-### Common Case Where Variance Is Useful
+</details>
+
+<details>
+<summary><b>Common Case Where Variance Is Useful</b></summary>
 
 ```ts
 // Standard array iteration - here we want to allow partial parameter usage
@@ -107,32 +148,80 @@ items.forEach(arg => console.log(arg)); // Only using first parameter is fine
 items.forEach(() => console.log("Counting")); // Sometimes we don't need parameters at all
 ```
 
-## TypeScript's Justification vs. Reality
+</details>
+
+## ⚖️ TypeScript's Justification vs. Reality
 
 TypeScript's official position (from their [FAQ](https://github.com/Microsoft/TypeScript/wiki/FAQ#parameter-arity-variance-is-correct)) is that this behavior is "correct" because it supports common JavaScript patterns like array callbacks.
 
-However, this creates a blind spot in the type system:
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">❌</td>
+      <td><b>TypeScript enforces that you can't add MORE parameters than an interface specifies</b></td>
+    </tr>
+    <tr>
+      <td align="center">⚠️</td>
+      <td><b>But allows you to implement FEWER parameters, potentially ignoring critical information</b></td>
+    </tr>
+  </table>
+</div>
 
-1. TypeScript enforces that you can't add MORE parameters than an interface specifies
-2. But allows you to implement FEWER parameters, potentially ignoring critical information
-
-## Why This Matters
+## ❗ Why This Matters
 
 The parameter arity variance issue creates an inconsistency in TypeScript's otherwise strong type-checking:
 
-1. **Silent failures**: Implementations can silently ignore parameters without warning
-2. **Inconsistent enforcement**: Different rules applied to extra vs. missing parameters
-3. **False sense of safety**: Interface conformance doesn't guarantee parameter handling
+<div align="center">
+<table>
+  <tr>
+    <th>Problem</th>
+    <th>Description</th>
+    <th>Impact</th>
+  </tr>
+  <tr>
+    <td align="center"><b>Silent failures</b></td>
+    <td>Implementations can silently ignore parameters without warning</td>
+    <td>🔴 High</td>
+  </tr>
+  <tr>
+    <td align="center"><b>Inconsistent enforcement</b></td>
+    <td>Different rules applied to extra vs. missing parameters</td>
+    <td>🟠 Medium</td>
+  </tr>
+  <tr>
+    <td align="center"><b>False sense of safety</b></td>
+    <td>Interface conformance doesn't guarantee parameter handling</td>
+    <td>🔴 High</td>
+  </tr>
+</table>
+</div>
 
-## Solution
+## 💡 Solution
 
 The solution to this issue is to use the modified TypeScript compiler (in the `/bin` folder) that enforces stricter parameter checking. This compiler:
 
-1. Reports errors when functions with fewer parameters are assigned to function types that expect more parameters
-2. Maintains TypeScript's type safety without compromising on parameter handling
-3. Helps prevent potential runtime errors from silently ignored parameters
+<div align="center">
+<table>
+  <tr>
+    <td align="center">🛡️</td>
+    <td><b>Reports errors</b> when functions with fewer parameters are assigned to function types that expect more parameters</td>
+  </tr>
+  <tr>
+    <td align="center">🔒</td>
+    <td><b>Maintains TypeScript's type safety</b> without compromising on parameter handling</td>
+  </tr>
+  <tr>
+    <td align="center">🚫</td>
+    <td><b>Helps prevent potential runtime errors</b> from silently ignored parameters</td>
+  </tr>
+  <tr>
+    <td align="center">✅</td>
+    <td><b>Works properly with callbacks</b> due to modified TypeScript definition files in the bin folder</td>
+  </tr>
+</table>
+</div>
 
-## Modifying d.ts Files
+## 🛠️ Modifying d.ts Files
 
 To modify d.ts files in the bin folder, run the following commands:
 
@@ -141,12 +230,47 @@ node .\transform-dts-files.js
 npx dprint fmt "bin/*.d.ts"
 ```
 
-## Previous Issues That Are Now Resolved by The Modified Compiler
+## 🔄 Previously Reported Issues Now Resolved
 
 The following issues were previously marked as "working as intended" by the TypeScript team, but are now caught and reported as errors by the modified compiler:
 
-- [#13043: Type hole with compatibility between optional parameters/extra parameters](https://github.com/microsoft/TypeScript/issues/13043)
-- [#17868: Reject functions with not enough parameters on strict mode](https://github.com/microsoft/TypeScript/issues/17868)
-- [#20274: Feature request - Make a parameter required for callback function](https://github.com/microsoft/TypeScript/issues/20274)
-- [#20541: Function argument comparison doesn't match expectations](https://github.com/microsoft/TypeScript/issues/20541)
-- [#21868: Typecheck passes for incorrect assignment](https://github.com/microsoft/TypeScript/issues/21868)
+<div align="center">
+<table>
+  <tr>
+    <th>Issue</th>
+    <th>Description</th>
+    <th>Status</th>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/microsoft/TypeScript/issues/13043">#13043</a></td>
+    <td>Type hole with compatibility between optional parameters/extra parameters</td>
+    <td>✅ Fixed</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/microsoft/TypeScript/issues/17868">#17868</a></td>
+    <td>Reject functions with not enough parameters on strict mode</td>
+    <td>✅ Fixed</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/microsoft/TypeScript/issues/20274">#20274</a></td>
+    <td>Feature request - Make a parameter required for callback function</td>
+    <td>✅ Fixed</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/microsoft/TypeScript/issues/20541">#20541</a></td>
+    <td>Function argument comparison doesn't match expectations</td>
+    <td>✅ Fixed</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/microsoft/TypeScript/issues/21868">#21868</a></td>
+    <td>Typecheck passes for incorrect assignment</td>
+    <td>✅ Fixed</td>
+  </tr>
+</table>
+</div>
+
+---
+
+<div align="center">
+  <p><i>Contribute to make TypeScript even better! 🚀</i></p>
+</div>
