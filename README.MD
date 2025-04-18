@@ -239,38 +239,46 @@ The following issues were previously marked as "working as intended" by the Type
   <tr>
     <th>Issue</th>
     <th>Description</th>
+    <th>Issue Date</th>
     <th>Status</th>
   </tr>
   <tr>
     <td><a href="https://github.com/microsoft/TypeScript/issues/13043">#13043</a></td>
     <td>Type hole with compatibility between optional parameters/extra parameters</td>
+    <td>2016-12-20</td>
     <td>✅ Fixed</td>
   </tr>
   <tr>
     <td><a href="https://github.com/microsoft/TypeScript/issues/17868">#17868</a></td>
     <td>Reject functions with not enough parameters on strict mode</td>
+    <td>2017-08-17</td>
     <td>✅ Fixed</td>
   </tr>
   <tr>
     <td><a href="https://github.com/microsoft/TypeScript/issues/20274">#20274</a></td>
     <td>Feature request - Make a parameter required for callback function</td>
+    <td>2018-11-27</td>
     <td>✅ Fixed</td>
   </tr>
   <tr>
     <td><a href="https://github.com/microsoft/TypeScript/issues/20541">#20541</a></td>
     <td>Function argument comparison doesn't match expectations</td>
+    <td>2017-12-07</td>
     <td>✅ Fixed</td>
   </tr>
   <tr>
     <td><a href="https://github.com/microsoft/TypeScript/issues/21868">#21868</a></td>
     <td>Typecheck passes for incorrect assignment</td>
+    <td>2018-02-11</td>
+    <td>✅ Fixed</td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/microsoft/TypeScript/issues/46881">#46881</a></td>
+    <td>Strict check arity of method that implements interface, type or class</td>
+    <td>2021-11-20</td>
     <td>✅ Fixed</td>
   </tr>
 </table>
 </div>
 
 ---
-
-<div align="center">
-  <p><i>Contribute to make TypeScript even better! 🚀</i></p>
-</div>
