@@ -1,0 +1,22 @@
+{
+  "name": "parameter-arity-variance-is-not-correct",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/topce/parameter-arity-variance-is-not-correct.git"
+  },
+  "author": "topce",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/topce/parameter-arity-variance-is-not-correct/issues"
+  },
+  "homepage": "https://github.com/topce/parameter-arity-variance-is-not-correct#readme",
+  "devDependencies": {
+    "@topce/native-preview": "^7.0.0-dev.20250531.1"
+  }
+}
