@@ -19,7 +19,6 @@
 - [⚖️ TypeScript's Justification vs. Reality](#️-typescripts-justification-vs-reality)
 - [❗ Why This Matters](#-why-this-matters)
 - [💡 Solution](#-solution)
-- [🛠️ Modifying d.ts Files](#️-modifying-dts-files)
 - [🔄 Previously Reported Issues Now Resolved](#-previously-reported-issues-now-resolved)
 
 </details>
@@ -30,37 +29,50 @@ TypeScript allows functions with fewer parameters to be assigned to function typ
 
 ## 🚀 Running the Examples
 
-This project includes two versions of TypeScript compiler:
+**Note: This project currently only works on Windows.**
 
-<table>
-  <tr>
-    <th>Version</th>
-    <th>Description</th>
-    <th>Command</th>
-  </tr>
-  <tr>
-    <td>🔧 <b>Modified Version</b><br>(in <code>/bin</code> folder)</td>
-    <td>Reports errors when functions with fewer parameters are assigned to function types with more parameters.<br><br>Source: <a href="https://github.com/topce/typescript-go/tree/best-type-script">typescript-go/best-type-script</a></td>
-    <td>
-      <pre>.\bin\tsgo.exe tsc .\main.ts</pre>
-    </td>
-  </tr>
-  <tr>
-    <td>🔧 <b>Original Microsoft Version</b><br>(in <code>/_bin</code> folder)</td>
-    <td>Uses TypeScript's default parameter arity variance behavior.</td>
-    <td>
-      <pre>.\_bin\tsgo.exe tsc .\main.ts</pre>
-    </td>
-  </tr>
-</table>
+### 📦 Dependencies
 
-### ⚙️ Differences Between Versions
+This project uses a custom version of TypeScript Go provided by [`@topce/native-preview`](https://www.npmjs.com/package/@topce/native-preview) for enhanced functionality and compatibility.
 
-The key difference is that the modified compiler in the `/bin` folder:
+**⚠️ Note: `@topce/native-preview` currently only works on Windows.**
+
+Make sure to install the version maintained by @topce:
+
+```bash
+npm install @topce/native-preview
+```
+
+### 🔧 TypeScript Compiler
+
+This project uses a custom TypeScript compiler provided by `@topce/native-preview`. The compiler is installed via npm and provides enhanced parameter arity variance checking.
+
+**Available Commands:**
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Compile main.ts using the custom compiler |
+| `npm run compile` | Compile all TypeScript files using the custom compiler |
+| `npm run compile-all` | Alternative command to compile all *.ts files |
+
+**Direct Usage:**
+
+```bash
+# Compile main.ts
+npx tsgo tsc .\main.ts
+
+# Compile all TypeScript files
+npx tsgo tsc *.ts
+```
+
+### ⚙️ Enhanced Compiler Features
+
+The custom TypeScript compiler provided by `@topce/native-preview`:
 
 - ✅ Enforces stricter parameter checking by default
 - ✅ Flags functions with fewer parameters when assigned to function types with more parameters
-- ✅ Reports errors in cases where the original compiler would silently allow potentially unsafe assignments
+- ✅ Reports errors in cases where the original TypeScript compiler would silently allow potentially unsafe assignments
+- ✅ Source: [typescript-go/best-type-script](https://github.com/topce/typescript-go/tree/best-type-script)
 
 This helps identify potential runtime errors that could occur when required parameters are silently ignored.
 
@@ -177,19 +189,18 @@ The parameter arity variance issue creates an inconsistency in TypeScript's othe
     <th>Problem</th>
     <th>Description</th>
     <th>Impact</th>
-  </tr>
-  <tr>
-    <td align="center"><b>Silent failures</b></td>
+  </tr>  <tr>
+    <td><b>Silent failures</b></td>
     <td>Implementations can silently ignore parameters without warning</td>
     <td>🔴 High</td>
   </tr>
   <tr>
-    <td align="center"><b>Inconsistent enforcement</b></td>
+    <td><b>Inconsistent enforcement</b></td>
     <td>Different rules applied to extra vs. missing parameters</td>
     <td>🟠 Medium</td>
   </tr>
   <tr>
-    <td align="center"><b>False sense of safety</b></td>
+    <td><b>False sense of safety</b></td>
     <td>Interface conformance doesn't guarantee parameter handling</td>
     <td>🔴 High</td>
   </tr>
@@ -198,7 +209,15 @@ The parameter arity variance issue creates an inconsistency in TypeScript's othe
 
 ## 💡 Solution
 
-The solution to this issue is to use the modified TypeScript compiler (in the `/bin` folder) that enforces stricter parameter checking. This compiler:
+The solution to this issue is to use the custom TypeScript Go compiler provided by [`@topce/native-preview`](https://www.npmjs.com/package/@topce/native-preview). This enhanced compiler enforces stricter parameter checking and provides better type safety.
+
+**Install the solution:**
+
+```bash
+npm install @topce/native-preview
+```
+
+This custom TypeScript implementation:
 
 <div align="center">
 <table>
@@ -213,22 +232,12 @@ The solution to this issue is to use the modified TypeScript compiler (in the `/
   <tr>
     <td align="center">🚫</td>
     <td><b>Helps prevent potential runtime errors</b> from silently ignored parameters</td>
-  </tr>
-  <tr>
+  </tr>  <tr>
     <td align="center">✅</td>
-    <td><b>Works properly with callbacks</b> due to modified TypeScript definition files in the bin folder</td>
+    <td><b>Works properly with callbacks</b> and provides enhanced parameter arity checking</td>
   </tr>
 </table>
 </div>
-
-## 🛠️ Modifying d.ts Files
-
-To modify d.ts files in the bin folder, run the following commands:
-
-```bash
-node .\transform-dts-files.js
-npx dprint fmt "bin/*.d.ts"
-```
 
 ## 🔄 Previously Reported Issues Now Resolved
 

@@ -1,10 +1,12 @@
 {
   "name": "parameter-arity-variance-is-not-correct",
   "version": "1.0.0",
-  "description": "<div align=\"center\">",
+  "description": "A demonstration project showcasing TypeScript's parameter arity variance issues and comparing custom compiler behavior with the original Microsoft implementation. Currently supports Windows only.",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsgo tsc .\\main.ts",
+    "compile": "tsgo tsc .\\*.ts",
+    "compile-all": "tsgo tsc *.ts"
   },
   "repository": {
     "type": "git",
