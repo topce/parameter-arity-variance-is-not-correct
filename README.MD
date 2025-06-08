@@ -51,17 +51,26 @@ This project uses a custom TypeScript compiler provided by `@topce/native-previe
 
 | Command | Description |
 |---------|-------------|
-| `npm run build` | Compile main.ts using the custom compiler |
-| `npm run compile` | Compile all TypeScript files using the custom compiler |
-| `npm run compile-all` | Alternative command to compile all *.ts files |
+| `npm run transpile:main` | Transpile main.ts using the custom compiler |
+| `npm run transpile:all` | Transpile all TypeScript files using the custom compiler |
+| `npm run transpile:13043` | Transpile 13043.ts |
+| `npm run transpile:17868` | Transpile 17868.ts |
+| `npm run transpile:20541` | Transpile 20541.ts |
+| `npm run transpile:21868` | Transpile 21868.ts |
 
 **Direct Usage:**
 
 ```bash
-# Compile main.ts
+# Transpile main.ts
 npx tsgo tsc .\main.ts
 
-# Compile all TypeScript files
+# Transpile individual files
+npx tsgo tsc .\13043.ts
+npx tsgo tsc .\17868.ts
+npx tsgo tsc .\20541.ts
+npx tsgo tsc .\21868.ts
+
+# Transpile all TypeScript files at once
 npx tsgo tsc *.ts
 ```
 

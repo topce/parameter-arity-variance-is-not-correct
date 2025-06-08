@@ -4,9 +4,12 @@
   "description": "A demonstration project showcasing TypeScript's parameter arity variance issues and comparing custom compiler behavior with the original Microsoft implementation. Currently supports Windows only.",
   "main": "main.js",
   "scripts": {
-    "build": "tsgo tsc .\\main.ts",
-    "compile": "tsgo tsc .\\*.ts",
-    "compile-all": "tsgo tsc *.ts"
+    "transpile:all": "npm run transpile:main && npm run transpile:13043 && npm run transpile:17868 && npm run transpile:20541 && npm run transpile:21868",
+    "transpile:main": "tsgo tsc .\\main.ts",
+    "transpile:13043": "tsgo tsc .\\13043.ts",
+    "transpile:17868": "tsgo tsc .\\17868.ts",
+    "transpile:20541": "tsgo tsc .\\20541.ts",
+    "transpile:21868": "tsgo tsc .\\21868.ts"
   },
   "repository": {
     "type": "git",
