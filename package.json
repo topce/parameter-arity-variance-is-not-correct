@@ -1,20 +1,47 @@
 {
   "name": "parameter-arity-variance-is-not-correct",
   "version": "1.0.0",
-  "description": "A demonstration project showcasing TypeScript's parameter arity variance issues and comparing custom compiler behavior with the original Microsoft implementation. Currently supports Windows only.",
+  "description": "A comprehensive analysis and demonstration of TypeScript's parameter arity variance issues, featuring examples from real GitHub issues and a custom TypeScript compiler that enforces stricter parameter checking. Includes test cases for issues #13043, #16871, #17868, #20274, #20541, and #21868. Currently supports Windows only.",
   "main": "main.js",
   "scripts": {
-    "transpile:all": "npm run transpile:main && npm run transpile:13043 && npm run transpile:17868 && npm run transpile:20541 && npm run transpile:21868",
     "transpile:main": "tsgo tsc .\\main.ts",
     "transpile:13043": "tsgo tsc .\\13043.ts",
+    "transpile:16871": "tsgo tsc .\\16871.ts",
     "transpile:17868": "tsgo tsc .\\17868.ts",
+    "transpile:20274": "tsgo tsc .\\20274.ts",
     "transpile:20541": "tsgo tsc .\\20541.ts",
-    "transpile:21868": "tsgo tsc .\\21868.ts"
+    "transpile:21868": "tsgo tsc .\\21868.ts",
+    "transpile:all": "tsgo tsc .\\13043.ts .\\16871.ts .\\17868.ts .\\20274.ts",
+    "tsc:main": "tsc .\\main.ts",
+    "tsc:13043": "tsc .\\13043.ts",
+    "tsc:16871": "tsc .\\16871.ts",
+    "tsc:17868": "tsc .\\17868.ts",
+    "tsc:20274": "tsc .\\20274.ts",
+    "tsc:20541": "tsc .\\20541.ts",
+    "tsc:21868": "tsc .\\21868.ts",
+    "tsc:all": "tsc .\\13043.ts .\\16871.ts .\\17868.ts .\\20274.ts",
+    "compare:13043": "echo === Default TypeScript === & npm run tsc:13043 & echo === Custom TypeScript === & npm run transpile:13043",
+    "compare:16871": "echo === Default TypeScript === & npm run tsc:16871 & echo === Custom TypeScript === & npm run transpile:16871",
+    "compare:17868": "echo === Default TypeScript === & npm run tsc:17868 & echo === Custom TypeScript === & npm run transpile:17868",
+    "compare:20274": "echo === Default TypeScript === & npm run tsc:20274 & echo === Custom TypeScript === & npm run transpile:20274",
+    "compare:20541": "echo === Default TypeScript === & npm run tsc:20541 & echo === Custom TypeScript === & npm run transpile:20541",
+    "compare:21868": "echo === Default TypeScript === & npm run tsc:21868 & echo === Custom TypeScript === & npm run transpile:21868",
+    "compare:all": "echo === Default TypeScript === & npm run tsc:all & echo === Custom TypeScript === & npm run transpile:all"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/topce/parameter-arity-variance-is-not-correct.git"
   },
+  "keywords": [
+    "typescript",
+    "parameter-arity",
+    "type-safety",
+    "compiler",
+    "variance",
+    "function-parameters",
+    "type-checking",
+    "typescript-issues"
+  ],
   "author": "topce",
   "license": "ISC",
   "bugs": {
@@ -22,6 +49,7 @@
   },
   "homepage": "https://github.com/topce/parameter-arity-variance-is-not-correct#readme",
   "devDependencies": {
-    "@topce/native-preview": "^7.0.0-dev.20250531.1"
+    "@topce/native-preview": "^7.0.0-dev.20250824",
+    "typescript": "^5.9.2"
   }
 }
