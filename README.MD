@@ -130,20 +130,37 @@ This targets **contract-facing kinds** (interfaces, classes, call/construct sign
 
 ## Test Matrix
 
-`test.ts` contains **10 test cases**, one per kind. Each assigns a function with *fewer* parameters than the target type expects:
+`test.ts` contains **10 test cases**, one per `StrictArity` kind. `./test.sh` runs every flag combination and verifies expected error counts.
 
-| # | Kind | Expected with `--strictArity all` |
-|---|------|----------------------------------|
-| 1 | `callsignature` | ✅ error |
-| 2 | `constructsignature` | ✅ error |
-| 3 | `methodsignature` | ✅ error |
-| 4 | `methoddeclaration` | ✅ error |
-| 5 | `constructor` | ⚠️ 0 errors in TS 7.0.3 (not triggered by derived class ctors) |
-| 6 | `functiondeclaration` | ✅ error |
-| 7 | `functionexpression` | ⚠️ overlaps with `functiontype` |
-| 8 | `arrowfunction` | ⚠️ overlaps with `functiontype` |
-| 9 | `functiontype` | ✅ 3 errors (catches #7, #8, #9) |
-| 10 | `constructortype` | ✅ error |
+### Single-Flag Tests
+
+Each flag is tested in isolation — only that flag is enabled, all others are off:
+
+| Flag | Case | Errors | Note |
+|------|------|--------|------|
+| `callsignature` | #1 — call signature assignment | **1** | |
+| `constructsignature` | #2 — construct signature assignment | **1** | |
+| `methodsignature` | #3 — interface method implementation | **1** | |
+| `methoddeclaration` | #4 — class method override | **1** | |
+| `constructor` | #5 — derived class constructor | **0** | Not triggered by derived class ctors in TS 7.0.3 |
+| `functiondeclaration` | #6 — function declaration as type | **1** | |
+| `functionexpression` | #7 — function expression assignment | **0** | Overlaps with `functiontype` — the type-level check wins |
+| `arrowfunction` | #8 — arrow function assignment | **0** | Overlaps with `functiontype` — the type-level check wins |
+| `functiontype` | #7, #8, #9 — all function-type assignments | **3** | Catches expression, arrow, and callback cases together |
+| `constructortype` | #10 — constructor type assignment | **1** | |
+
+With `--strictArity all` (every flag on), the total is **9 errors** — `functionexpression` and `arrowfunction` contribute nothing net new since `functiontype` already catches those.
+
+### Presets & Combinations
+
+| Test | Flags | Errors |
+|------|-------|--------|
+| `all` / `true` | All 10 kinds | **9** |
+| `none` / `false` | Off | **0** |
+| `methoddeclaration,methodsignature,callsignature,constructsignature` | Recommended preset | **4** |
+| `functiontype,arrowfunction` | Overlap example | **3** |
+| `callsignature,methodsignature` | Two-kind subset | **2** |
+| `functiontype,methoddeclaration,functiondeclaration` | Three-kind subset | **5** |
 
 All **19 flag/test combinations** pass. Run `npm test` to verify.
 
