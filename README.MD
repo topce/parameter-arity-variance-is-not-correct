@@ -43,16 +43,7 @@ onEvent(logEvent);
 // Compiles ✅  Runtime: payload silently dropped
 ```
 
-The TypeScript issue tracker has been debating this for nearly a decade:
-
-| Issue | Title | Status |
-|-------|-------|--------|
-| [#13043](https://github.com/Microsoft/TypeScript/issues/13043) | Provide option to disallow functions with fewer parameters in function type compatibility checks | Open since 2016 |
-| [#16871](https://github.com/Microsoft/TypeScript/issues/16871) | Option to enforce exact parameter counts in function type compatibility | Open |
-| [#17868](https://github.com/Microsoft/TypeScript/issues/17868) | `strictFunctionTypes` should also apply to function parameter arity | Open |
-| [#20274](https://github.com/Microsoft/TypeScript/issues/20274) | Function parameter bivariance is unsound | Open |
-| [#20541](https://github.com/Microsoft/TypeScript/issues/20541) | `strictBindCallApply` should also affect function parameter arity | Open |
-| [#21868](https://github.com/Microsoft/TypeScript/issues/21868) | Suggestion: strict parameter arity check | Open |
+Run `./test.sh` to see every flag combination in action — `--strictArity all` produces **9 errors**, `--strictArity none` produces **0**, and every subset lands somewhere in between.
 
 The TypeScript team's position has been that stricter parameter checking would be too disruptive, especially for callback-heavy APIs like `Array.prototype.forEach` and event handlers. **This repo exists to test that assumption — and to show it can be done granularly.**
 
