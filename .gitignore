@@ -1,3 +1,20 @@
 *.js
 /node_modules
 .kiro
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Build / test artifacts
+dist/
+out/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.sublime-*
