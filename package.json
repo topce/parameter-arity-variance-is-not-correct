@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/topce/parameter-arity-variance-is-not-correct#readme",
   "devDependencies": {
-    "@topce/native-preview": "^7.0.3",
+    "@topce/native-preview": "^7.0.5",
     "typescript": "^7.0.2"
   }
 }
