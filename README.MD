@@ -272,23 +272,6 @@ All **19 flag/test combinations** pass. Run `npm test` to reproduce.
 
 ---
 
-## Comparison: Compiler vs Linter
-
-Linter-based approaches (e.g., `@typescript-eslint/no-unused-vars`) operate on **lexical usage** — they check whether a declared parameter is referenced in the function body. They cannot detect type-level arity mismatches:
-
-```typescript
-type TakesTwo = (a: string, b: number) => void;
-
-// Parameter `a` is used, so no lint warning fires.
-// But the type contract says two arguments are expected — the second is silently dropped.
-const fn: TakesTwo = (a: string) => { console.log(a); };
-// No ESLint error ✓   No TS error (default) ✓   Caught by --strictArity functiontype ✓
-```
-
-Conversely, a function declaring *more* required parameters than its target type provides is already rejected by TypeScript by default — that direction has always been an error. `--strictArity` closes the remaining direction.
-
----
-
 ## Architecture
 
 ```
