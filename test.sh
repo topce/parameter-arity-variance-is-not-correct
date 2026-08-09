@@ -46,7 +46,7 @@ echo
 echo "── Expected: 1 error each (single flag matches its case) ──"
 test_case "--strictArity callsignature"            1 --strictArity callsignature
 test_case "--strictArity constructsignature"       1 --strictArity constructsignature
-test_case "--strictArity methodsignature"          1 --strictArity methodsignature
+test_case "--strictArity methodsignature"          2 --strictArity methodsignature
 test_case "--strictArity methoddeclaration"        1 --strictArity methoddeclaration
 # constructor: not triggered by derived class ctor overrides in TS 7.0.3
 test_case "--strictArity constructor"              0 --strictArity constructor
@@ -54,30 +54,30 @@ test_case "--strictArity functiondeclaration"      1 --strictArity functiondecla
 # functionexpression & arrowfunction overlap with functiontype in TS 7.0.3
 test_case "--strictArity functionexpression"       0 --strictArity functionexpression
 test_case "--strictArity arrowfunction"            0 --strictArity arrowfunction
-# functiontype catches 3: func expr var + arrow func var + callback arg
-test_case "--strictArity functiontype"             3 --strictArity functiontype
+# functiontype catches 5: func expr var + arrow func var + callback arg + chained unsoundness (#13043) + handler callback (#46881)
+test_case "--strictArity functiontype"             5 --strictArity functiontype
 test_case "--strictArity constructortype"          1 --strictArity constructortype
 
 echo
 echo "── Presets ──"
-test_case "--strictArity all  (9 errors in TS 7.0.3)"  9 --strictArity all
-test_case "--strictArity none"                        0 --strictArity none
-test_case "--strictArity true (alias for all)"        9 --strictArity true
+test_case "--strictArity all  (12 errors in TS 7.0.3)"  12 --strictArity all
+test_case "--strictArity none"                         0 --strictArity none
+test_case "--strictArity true (alias for all)"         12 --strictArity true
 test_case "--strictArity false (alias for none)"      0 --strictArity false
 
 echo
 echo "── Combinations ──"
-test_case "--strictArity functiontype,arrowfunction"              3 --strictArity functiontype,arrowfunction
-test_case "--strictArity callsignature,methodsignature"           2 --strictArity callsignature,methodsignature
+test_case "--strictArity functiontype,arrowfunction"              5 --strictArity functiontype,arrowfunction
+test_case "--strictArity callsignature,methodsignature"           3 --strictArity callsignature,methodsignature
 test_case "--strictArity functiontype,methoddeclaration,functiondeclaration" \
-          5 --strictArity functiontype,methoddeclaration,functiondeclaration
+          7 --strictArity functiontype,methoddeclaration,functiondeclaration
 
 echo
 echo "── Recommended for existing projects ──"
 echo "    Contract-focused: interface/class methods, call/construct signatures."
 echo "    Excludes callback-heavy kinds (function declarations, expressions, arrows, types)."
 test_case "--strictArity methoddeclaration,methodsignature,callsignature,constructsignature" \
-          4 --strictArity methoddeclaration,methodsignature,callsignature,constructsignature
+          5 --strictArity methoddeclaration,methodsignature,callsignature,constructsignature
 
 echo
 echo "──────────────────────────────────────────────────────────────────"

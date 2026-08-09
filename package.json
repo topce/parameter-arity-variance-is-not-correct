@@ -1,6 +1,7 @@
 {
   "name": "parameter-arity-variance-is-not-correct",
   "version": "1.0.0",
+  "private": true,
   "description": "Demonstrates that TypeScript's parameter arity variance can be checked at compile time via a custom --strictArity compiler flag. 10 test cases covering all syntactic kinds, with a full flag-combination test matrix.",
   "scripts": {
     "test": "./test.sh"
